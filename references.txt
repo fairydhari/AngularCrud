@@ -1,0 +1,6 @@
+https://www.youtube.com/watch?v=R2dOyHJu4a8
+configuration Reference
+https://www.talkingdotnet.com/implement-asp-net-core-spa-template-feature-in-angular6-app/
+https://www.telerik.com/kendo-angular-ui/components/grid/editing/editing-directives/
+npm install --save @progress/kendo-angular-grid @progress/kendo-angular-dropdowns @progress/kendo-angular-inputs @progress/kendo-angular-dateinputs @progress/kendo-data-query @progress/kendo-angular-intl @progress/kendo-angular-l10n @progress/kendo-drawing @progress/kendo-angular-excel-export @angular/animations
+https://www.telerik.com/kendo-angular-ui/components/grid/api/CommandColumnComponent/
