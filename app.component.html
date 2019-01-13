@@ -1,0 +1,44 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+<div class="button-row">
+  <a [routerLink]="['create']">Create New Employee</a>
+
+  <!--<a mat-flat-button color="primary" [routerLink]="['/employee-create']"><mat-icon>add</mat-icon></a>-->
+</div>
+
+<h2>Here are some links to help you start: </h2>
+<!--<div>
+  <app-employee-list></app-employee-list>
+</div>-->
+
+<nav>
+  <!--<a routerLink="/employeeList">Dashboard</a>-->
+  <a routerLink="/create">Create New Employee</a>
+</nav>
+<router-outlet></router-outlet>
+
+<button (click)="componentInsideModal.open()">Component inside modal</button>
+<modal #componentInsideModal>
+  <ng-template #modalHeader><h2>Component inside modal</h2></ng-template>
+  <ng-template #modalBody>
+   <app-create-employee></app-create-employee>
+  </ng-template>
+  <ng-template #modalFooter></ng-template>
+</modal>
+
+<!--<nav>
+  <a routerLink="/employeeList">Dashboard</a>
+  <a routerLink="/create">Heroes</a>
+</nav>
+<router-outlet></router-outlet>-->
+<!--<ul>
+  <li>
+    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
+  </li>
+  <li>
+    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
+  </li>
+  <li>
+    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
+  </li>
+</ul>-->
