@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ClientApp</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://unpkg.com/@progress/kendo-theme-default@latest/dist/all.css" />
+  <script src="assets/js/jquery-2.1.1.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <style>
+    body.modal-open {
+      overflow: hidden; /* Optional: hides body scroll bar when modal is open. */
+    }
+
+    .modal {
+      opacity: 0; /* Fade in/out animation. */
+      transition: opacity 0.2s ease-in;
+    }
+
+    .modal-content {
+      color: #333;
+      background-color: #fff;
+      padding: 25px;
+    }
+
+    .modal-header {
+      display: flex;
+      padding-bottom: 14px;
+    }
+
+      .modal-header > h2 {
+        flex: 1;
+      }
+
+      .modal-header .close {
+        background-color: #fff;
+        font-weight: 100;
+        font-size: 2.5rem;
+        border: 0;
+        border-radius: 999px;
+        padding: 0;
+        margin: 0;
+        line-height: 1rem;
+        height: 4rem;
+        width: 4rem;
+      }
+
+        .modal-header .close:hover {
+          background-color: #ccc;
+        }
+  </style>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
