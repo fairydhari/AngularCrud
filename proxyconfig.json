@@ -1,0 +1,2 @@
+{ "/api": { "target": "http://localhost:54363", "secure": false,"changeOrgin":true } }
+//npm start command

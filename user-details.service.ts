@@ -18,7 +18,7 @@ export class UserDetailsService {
     var body = JSON.stringify(userDetails);
     var headerOptions = new Headers({'Content-Type':'application/json'});
     var requestOptions = new RequestOptions({method : RequestMethod.Post,headers : headerOptions});
-    return this.http.post('http://localhost:28750/api/Employee',body,requestOptions).map(x => x.json());
+    return this.http.post('/api/user/PostUserDetails',body,requestOptions).map(x => x.json());
   }
  
   putUserDetails(id, userDetails) {
