@@ -1,0 +1,50 @@
+
+ <div class="form-group col-md-6" *ngIf="showAllData">
+  <input type="text"  (keyup)="change($event)">
+  
+</div>
+<div>
+<kendo-grid
+       
+        [data]="gridView"
+        [sortable]="{ mode: 'multiple' }"
+        [sort]="sort"
+        (sortChange)="sortChange($event)"
+        [pageSize]="pageSize"
+        [skip]="skip"
+        [pageable]="showAllData"
+        (pageChange)="pageChange($event)"
+       
+    >
+    <kendo-grid-column field="ProductID" title="ID" width="40" [filterable]="false">
+    </kendo-grid-column>
+    <kendo-grid-column field="ProductName" title="Product Name">
+    </kendo-grid-column>
+    <kendo-grid-column field="FirstOrderedOn" title="First Ordered On" width="240" filter="date" format="{0:d}">
+    </kendo-grid-column>
+    <kendo-grid-column field="UnitPrice" title="Unit Price" width="180" filter="numeric" format="{0:c}">
+    </kendo-grid-column>
+    <kendo-grid-column field="Discontinued" width="120" filter="boolean">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <input type="checkbox" [checked]="dataItem.Discontinued" disabled/>
+        </ng-template>
+    </kendo-grid-column>
+    </kendo-grid>
+    <!--<p>
+      <label for="type">Type of the pager:
+          <select id="type" [(ngModel)]="type">
+              <option value="numeric">Numeric</option>
+              <option value="input">Input</option>
+          </select>
+      </label>
+    </p>-->
+   <!-- <p>
+      <label for="buttonCount">Maximum number of buttons:
+        <input id="buttonCount" class="k-textbox" type="number" [(ngModel)]="buttonCount"/>
+      </label>
+    </p>-->
+  </div>
+  <div>
+    <button (click)=showall()>show all</button>
+  </div>
+  <button (click)=nextPage()>next</button>
