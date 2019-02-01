@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TreeView.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.Net.Http.Headers;
+using System.IO;
+using System.Net.Http;
+using System.Net;
 
 namespace TreeView.Controllers
 {
@@ -14,7 +19,13 @@ namespace TreeView.Controllers
     [ApiController]
     public class MenuController : ControllerBase
     {
-      //  private readonly testdbContext _context;
+        private IHostingEnvironment _hostingEnvironment;
+
+        public MenuController(IHostingEnvironment hostingEnvironment)
+        {
+            _hostingEnvironment = hostingEnvironment;
+        }
+        //  private readonly testdbContext _context;
         private testdbContext db = new testdbContext();
         // GET: api/Menu
         [HttpGet("GetTreeList")]
@@ -93,25 +104,56 @@ namespace TreeView.Controllers
         public void Delete(int id)
         {
         }
-
-        //public Category GetById(int id)
-        //{
-        //    var category = db.Menu.Where(e => e.MenuId == null);
-
-        //    this.IncludeParentCategories(category);
-
-        //    return category;
-        //}
-        //private void IncludeParentCategories(Category category)
-        //{
-        //    var currentCategory = category;
-
-        //    do
-        //    {
-        //        this.UnitOfWork.Context.Entry(currentCategory).Reference(e => e.ParentCategory).Load();
-        //        currentCategory = currentCategory.ParentCategory;
-        //    }
-        //    while (currentCategory != null);
-        //}
+        [HttpPost, DisableRequestSizeLimit]
+        public HttpResponseMessage UploadFile()
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+                string folderName = "UploadedImages";
+                string webRootPath = _hostingEnvironment.WebRootPath;
+                string newPath = Path.Combine(webRootPath, folderName);
+                if (!Directory.Exists(newPath))
+                {
+                    Directory.CreateDirectory(newPath);
+                }
+                if (file.Length > 0)
+                {
+                    string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    string fullPath = Path.Combine(newPath, fileName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            catch (System.Exception ex)
+            {
+               return null;
+                //throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+        }
     }
+}
+    //public Category GetById(int id)
+    //{
+    //    var category = db.Menu.Where(e => e.MenuId == null);
+
+    //    this.IncludeParentCategories(category);
+
+    //    return category;
+    //}
+    //private void IncludeParentCategories(Category category)
+    //{
+    //    var currentCategory = category;
+
+    //    do
+    //    {
+    //        this.UnitOfWork.Context.Entry(currentCategory).Reference(e => e.ParentCategory).Load();
+    //        currentCategory = currentCategory.ParentCategory;
+    //    }
+    //    while (currentCategory != null);
+    //}
+}
 }

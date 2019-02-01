@@ -1,0 +1,23 @@
+<p>
+  new-menu works!
+</p>
+<style>
+  textarea {
+    white-space: nowrap;
+    width: 500px;
+    overflow: hidden;
+    /*// text-overflow: clip;*/
+    border: 1px solid #000000;
+  }
+</style>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<textarea rows="4" cols="50" placeholder="Description" (keyup)="autoGrow()" #textArea id="description" name="description" class="form-control" formControlName="description"> </textarea>
+  <div>
+    <img *ngFor="let url of urls" [src]="url" class="rounded mb-3" width="180">
+  </div>
+  <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+    {{progress}}%
+  </span>
+  <input type="file" multiple (change)="detectFiles($event)" accept="image/*" id="fldContentImage" name="fldContentImage" formControlName="fldContentImage">
+  <button type="button" (click)="addData($event)">Add</button>
+</form>
