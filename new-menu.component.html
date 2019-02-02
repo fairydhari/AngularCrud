@@ -15,9 +15,18 @@
   <div>
     <img *ngFor="let url of urls" [src]="url" class="rounded mb-3" width="180">
   </div>
+  <input #file type="file" multiple (change)="upload(file.files)" formControlName="fldContentImage"/>
+  <br />
   <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
     {{progress}}%
   </span>
-  <input type="file" multiple (change)="detectFiles($event)" accept="image/*" id="fldContentImage" name="fldContentImage" formControlName="fldContentImage">
+
+  <span style="font-weight:bold;color:green;" *ngIf="message">
+    {{message}}
+  </span>
+  <!--<span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+    {{progress}}%
+  </span>-->
+ 
   <button type="button" (click)="addData($event)">Add</button>
 </form>

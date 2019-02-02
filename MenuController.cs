@@ -12,148 +12,130 @@ using System.Net.Http.Headers;
 using System.IO;
 using System.Net.Http;
 using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace TreeView.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+  //  [ApiController]
+    [Produces("application/json")]
+
     public class MenuController : ControllerBase
     {
-        private IHostingEnvironment _hostingEnvironment;
+        private  testdbContext _context=new testdbContext();
 
-        public MenuController(IHostingEnvironment hostingEnvironment)
+        //public MenuController(testdbContext context)
+        //{
+        //    _context = context;
+        //}
+        [HttpGet]
+        public IEnumerable<Menu> GetMenu()
         {
-            _hostingEnvironment = hostingEnvironment;
+            return _context.Menu;
         }
-        //  private readonly testdbContext _context;
-        private testdbContext db = new testdbContext();
-        // GET: api/Menu
-        [HttpGet("GetTreeList")]
-        public IEnumerable<EmployeeHierarchy> Get()
+        // GET: api/Workouts/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMenu([FromRoute] int id)
         {
-            var employeesHierarchy = GetEmployeesHierachy(db.Menu.AsEnumerable(), null);
-            return employeesHierarchy;
-            //Menu root = context.Employee
-            //.Where(e => e.Parent == null).First();
-            //return new string[] { "value1", "value2" };
-            /* List<TreeviewItem> hierarchy = new List<TreeviewItem>();
-             hierarchy = db.Menu
-                             .Where(c => c.ParentId == null)
-                             .Select(c => new TreeviewItem()
-                             {
-                                 MenuId = c.MenuId,
-                                 MenuName = c.MenuName,
-                                 ParentId = c.ParentId,
-                                // Children = HieararchyWalk(c.MenuId)
-                             })
-                             .ToList();
-             return hierarchy;*/
-            //HieararchyWalk(hierarchy);
-
-        }
-        private IEnumerable<EmployeeHierarchy> GetEmployeesHierachy(IEnumerable<Menu> allEmployees, Menu parentEmployee)
-        {
-            int? parentEmployeeId = null;
-
-            if (parentEmployee != null)
-                parentEmployeeId = parentEmployee.MenuId;
-
-            var childEmployees = allEmployees.Where(e => e.ParentId == parentEmployeeId);
-
-            Collection<EmployeeHierarchy> hierarchy = new Collection<EmployeeHierarchy>();
-
-            foreach (var emp in childEmployees)
-                hierarchy.Add(new EmployeeHierarchy() { Employee = emp, Employees = GetEmployeesHierachy(allEmployees, emp) });
-
-            return hierarchy;
-        }
-        //  private List<>
-        public static void HieararchyWalk(List<TreeviewItem> hierarchy)
-        {
-            if (hierarchy != null)
+            if (!ModelState.IsValid)
             {
-                foreach (var item in hierarchy)
-                {
-                    //Console.WriteLine(string.Format("{0} {1}", item.Id, item.Text));
-                    HieararchyWalk(item.Children);
-                }
+                return BadRequest(ModelState);
             }
-        }
 
-        // GET: api/Menu/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+            var workout = await _context.Menu.SingleOrDefaultAsync(m => m.MenuId == id);
 
-        // POST: api/Menu
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+            if (workout == null)
+            {
+                return NotFound();
+            }
 
-        // PUT: api/Menu/5
+            return Ok(workout);
+        }
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> PutWorkout([FromRoute] int id, [FromBody] Menu workout)
         {
-        }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-        [HttpPost, DisableRequestSizeLimit]
-        public HttpResponseMessage UploadFile()
-        {
+            if (id != workout.MenuId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(workout).State = EntityState.Modified;
+
             try
             {
-                var file = Request.Form.Files[0];
-                string folderName = "UploadedImages";
-                string webRootPath = _hostingEnvironment.WebRootPath;
-                string newPath = Path.Combine(webRootPath, folderName);
-                if (!Directory.Exists(newPath))
-                {
-                    Directory.CreateDirectory(newPath);
-                }
-                if (file.Length > 0)
-                {
-                    string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    string fullPath = Path.Combine(newPath, fileName);
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
-                }
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                await _context.SaveChangesAsync();
             }
-            catch (System.Exception ex)
+            catch (DbUpdateConcurrencyException)
             {
-               return null;
-                //throw new HttpResponseException(HttpStatusCode.NotFound);
+                if (!WorkoutExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return NoContent();
+        }
+       
+        [HttpPost("saveMenu")]
+        public async Task<IActionResult> PostWorkout([FromBody]JObject jsonData)
+        {
+            dynamic json = jsonData;
+
+            JObject jauthor = json.Menu;
+            string token = json.language;
+            return Ok("test");
+        }
+        // [Route("language/{language}")]
+        /*  public async Task<IActionResult> PostWorkout([FromBody] Menu workout)
+          {
+              if (!ModelState.IsValid)
+              {
+                  return BadRequest(ModelState);
+              }
+
+              _context.Menu.Add(workout);
+              await _context.SaveChangesAsync();
+
+              return CreatedAtAction("GetWorkout", new { id = workout.MenuId }, workout);
+          }*/
+        // DELETE: api/Workouts/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteWorkout([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var workout = await _context.Menu.SingleOrDefaultAsync(m => m.MenuId == id);
+            if (workout == null)
+            {
+                return NotFound();
+            }
+
+            _context.Menu.Remove(workout);
+            await _context.SaveChangesAsync();
+
+            return Ok(workout);
+        }
+        [HttpPost("test")]
+        public async Task<IActionResult> test([FromBody]JObject json)
+        {
+            return Ok("test");
+        }
+        private bool WorkoutExists(int id)
+        {
+            return _context.Menu.Any(e => e.MenuId == id);
         }
     }
 }
-    //public Category GetById(int id)
-    //{
-    //    var category = db.Menu.Where(e => e.MenuId == null);
-
-    //    this.IncludeParentCategories(category);
-
-    //    return category;
-    //}
-    //private void IncludeParentCategories(Category category)
-    //{
-    //    var currentCategory = category;
-
-    //    do
-    //    {
-    //        this.UnitOfWork.Context.Entry(currentCategory).Reference(e => e.ParentCategory).Load();
-    //        currentCategory = currentCategory.ParentCategory;
-    //    }
-    //    while (currentCategory != null);
-    //}
-}
-}
+        
