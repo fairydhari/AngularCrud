@@ -1,0 +1,117 @@
+<div class="row">
+  <button class="btn btn-default" (click)="onActivate()">Activate</button>
+  <div class="col-md-6 col-md-offset-2">
+
+    <form [formGroup]="entryForm">
+      <div class="form-group">
+        <img *ngFor="let url of urls" [src]="url" class="rounded mb-3" width="180">
+      </div>
+      <div class="form-group">
+        <label for="email">description:</label>
+        <textarea class="form-control" formControlName="description" id="description"></textarea>
+        <div *ngIf="submitted && entryForm.controls.description.errors" class="error">
+          <div *ngIf="entryForm.controls.description.errors.required">description is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="pwd">Content Image:</label>
+        <!--<input type="password" class="form-control" formControlName="fldContentImage" id="fldContentImage">-->
+        <input #file type="file" multiple (change)="upload(file.files)" formControlName="fldContentImage" id="fldContentImage" />
+        <!--<div *ngIf="submitted && entryForm.controls.fldContentImage.errors" class="error">
+          <div *ngIf="entryForm.controls.fldContentImage.errors.required">description is required</div>
+        </div>-->
+        <br />
+        <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+
+          {{progress}}%
+        </span>
+
+        <span style="font-weight:bold;color:green;" *ngIf="message">
+          {{message}}
+        </span>
+        <!--<div *ngIf="submitted && entryForm.controls.password.errors" class="error">
+          <div *ngIf="entryForm.controls.password.errors.required">Password is required</div>
+        </div>-->
+      </div>
+      <button class="btn btn-default" (click)="onSubmit()" [disabled]="disable">Save</button>&nbsp;&nbsp; <button class="btn btn-default" (click)="onCancel()" [disabled]="disable">Cancel</button>
+      <div *ngIf="invalidLogin" class="error">
+        <div>Invalid credentials.</div>
+      </div>
+    </form>
+  </div>
+
+  <div class="example-wrapper">
+    <!--<img ng-src={{"../../../../Upload/AddEducation.png"}} />-->
+   
+    <img src=""
+         height="40" width="40" style="border-radius:30px;" alt="Patient Image" />
+    <!--<span  *ngIf="localStorage.getItem('language') == 'En'">one</span>
+  <span ng-if="localStorage.getItem('language') == 'Ar' ">second</span>-->
+    <!--<kendo-grid [kendoGridBinding]="gridData"
+        [pageSize]="pageSize"
+        [skip]="skip"
+        [pageable]="true"
+        [height]="533"
+        (dataStateChange)="onStateChange($event)"
+        (edit)="editHandler($event,dataItem)" (remove)="removeHandler($event)"
+        (add)="addHandler($event)"
+        (pageChange)="onPageChange($event)">-->
+
+    <kendo-grid [kendoGridBinding]="gridData"
+                (dataStateChange)="onStateChange($event)"
+                (edit)="editHandler($event,dataItem)" (remove)="removeHandler($event)">
+      <!--<ng-template kendoGridToolbarTemplate>
+    <button kendoGridAddCommand>Add new</button>
+  </ng-template>-->
+      <!--<kendo-grid-column field="contentId" title="ContentId" width="40">
+      </kendo-grid-column>-->
+      <kendo-grid-column field="descriptionEn" title="Description" width="250">
+      </kendo-grid-column>
+      <!--<kendo-grid-column field="contentImage" title="Image" width="80">
+  </kendo-grid-column>-->
+
+      <kendo-grid-column title="Description">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div *ngIf="dataItem.descriptionEn !== null">{{ (dataItem.descriptionEn) }}</div>
+          <div *ngIf="dataItem.descriptionAr !== null">{{ (dataItem.descriptionAr)}}</div>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column title="content image">
+        <ng-template kendoGridCellTemplate let-dataItem>
+
+          <!--<img [src]="'data:image/jpg/png;base64,'+dataItem.contentImage" />-->
+          <img [src]="dataItem.contentImage"
+               height="140" width="100" style="border-radius:10px;" alt="Patient Image" />
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-command-column title="command" width="120">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoGridEditCommand [primary]="true">Edit</button>
+          <button kendoGridRemoveCommand (click)="showConfirmation(dataItem)" class="k-button">Remove</button>
+        </ng-template>
+      </kendo-grid-command-column>
+      <!--<kendo-grid-command-column title="Description" width="120">
+    <ng-template>
+      <span ng-if="localStorage.getItem('language') === 'En'">one</span>
+      <span ng-if="localStorage.getItem('language') === 'Ar' ">second</span>
+    </ng-template>
+  </kendo-grid-command-column>-->
+      <!--<ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+    <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+    <kendo-slider [showButtons]="true" [tickPlacement]="'none'"
+                  [max]="totalPages" min]="1" (valueChange)="sliderChange($event)"
+                  [value]="currentPage">
+    </kendo-slider>
+    <kendo-pager-info></kendo-pager-info>
+    <kendo-pager-next-buttons></kendo-pager-next-buttons>
+    <kendo-pager-page-sizes [pageSizes]="[1,5, 10, 40]"></kendo-pager-page-sizes>
+  </ng-template>-->
+    </kendo-grid>
+    <!--<kendo-grid-edit-form [model]="editDataItem" [isNew]="isNew"
+                        (save)="saveHandler($event)"
+                        (cancel)="cancelHandler()">
+  </kendo-grid-edit-form>-->
+  </div>
+  <div kendoDialogContainer></div>  
+</div>
