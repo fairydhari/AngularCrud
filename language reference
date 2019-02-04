@@ -1,0 +1,11 @@
+reference link
+
+https://www.npmjs.com/package/@ngx-translate/core/v/10.0.2
+
+npm install @ngx-translate/core@^10.0.2 --save
+
+npm install @ngx-translate/core@8.0.0 --save
+
+npm uninstall @ngx-translate/core@^10.0.2 --save
+
+npm uninstall @ngx-translate/http-loader@6.0.0 --save
