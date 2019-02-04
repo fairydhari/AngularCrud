@@ -1,0 +1,106 @@
+<!--html-->
+<style>
+  #table {
+    display: table;
+  }
+
+  .tr {
+    display: table-row;
+  }
+
+  .td {
+    display: table-cell;
+  }
+</style>
+
+<div id="table">
+  <div class="tr" *ngFor="let rows of gridData">
+    <div class="td" *ngFor="let item of rows">{{item.menuNameEn}}</div>
+   
+  </div>
+  </div>
+  
+  <!-- angular -->
+  
+  import { Component, OnInit } from '@angular/core';
+import { MenuService } from '../services/menu.service';
+
+@Component({
+  selector: 'app-menu-display',
+  templateUrl: './menu-display.component.html',
+  styleUrls: ['./menu-display.component.css']
+})
+export class MenuDisplayComponent implements OnInit {
+  data: any[];
+  gridData: any[];
+  constructor(private menuService: MenuService) { }
+
+  ngOnInit() {
+    this.getMenu();
+  }
+  getMenu() {
+    //var permissionId = 2;
+    return this.menuService.getMenus()
+      .subscribe(res => {
+
+        this.data = res;
+        var newArr = [];
+        for (var i = 0; i < this.data.length; i += 2) {
+          newArr.push(this.data.slice(i, i + 2));
+        }
+        this.gridData = newArr;
+        console.log(this.gridData);
+      }, err => {
+        console.log(err);
+      });
+  }
+}
+
+<!--angular service -->
+
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { catchError, tap, map } from 'rxjs/operators';
+import { Menu } from '../model/menu';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+const apiUrl = "/api/Menus/";
+@Injectable()
+export class MenuService {
+
+  constructor(private http: HttpClient) { }
+  //baseUrl: string = '/api/HelpContents/';
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+
+      // TODO: send the error to remote logging infrastructure
+      console.error(error); // log to console instead
+
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+      //return of(result[]);
+      //return of([]);
+    };
+  }
+  getMenus(): Observable<Menu[]> {
+    
+    return this.http.get<any[]>(apiUrl + "GetMenu").pipe(
+      tap(heroes => console.log('fetched menus')),
+      catchError(this.handleError('getMenus', []))
+    );
+  }
+}
+
+
+<!-- controller -->
+private testdbContext _context = new testdbContext();
+
+        // GET: api/Menus
+        [HttpGet("GetMenu")]
+        public IEnumerable<Menu> GetMenu()
+        {
+            return _context.Menu;
+        }
