@@ -1,0 +1,2 @@
+<kendo-grid-column field="FirstOrderedOn" title="First Ordered On" width="240" filter="date" format="{0:dd/MMM/yyyy}">
+    </kendo-grid-column>
