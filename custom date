@@ -1,0 +1,7 @@
+ customers.forEach(proj => {  
+        console.log("dt" + proj.CreatedDate);
+        var dateOut = new Date(proj.CreatedDate);
+        proj.CreatedDate =this.datepipe.transform(dateOut, 'dd/MMM/yyyy');
+            console.log("dt1" + proj.CreatedDate);
+        
+    });  
