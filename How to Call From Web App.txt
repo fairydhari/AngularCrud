@@ -1,0 +1,13 @@
+	public static IDocumentStore GetDocumentStore()
+        {
+            string option = ConfigurationManager.AppSettings["DocumentStore"].ToString(); 
+            switch (option)
+            {
+                case "AZUREBLOB":
+                    return new AzureBlobDocumentStoreFactory().GetDocumentStore;
+                case "LOCALDISK":
+                    return new LocalDiskDocumentStoreFactory().GetDocumentStore;
+                default:
+                    throw new ArgumentException("Unsupported DocumentStore", option);
+            }
+        }
