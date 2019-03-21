@@ -1,0 +1,9 @@
+ [Route("deals/assigned"), HttpGet]
+        public async Task<IHttpActionResult> GetAssignedDeal(Guid dealId)
+        {
+            var result = await Platform.StoreFactory.GetStore<IDealStore>().GetDealByGuidAsync(dealId.ToString());
+            var vm = new DealInfoViewModel(result);
+            return Ok(vm);
+        }
+        
+         <add key="WebConnectionString" value="Server=DESKTOP-R0SHTFL\SQLEXPRESS01;Database=dbName;User Id=username;Password=password" xdt:Transform="Replace" xdt:Locator="Match(key)" />
