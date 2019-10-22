@@ -4,3 +4,15 @@ https://www.talkingdotnet.com/implement-asp-net-core-spa-template-feature-in-ang
 https://www.telerik.com/kendo-angular-ui/components/grid/editing/editing-directives/
 npm install --save @progress/kendo-angular-grid @progress/kendo-angular-dropdowns @progress/kendo-angular-inputs @progress/kendo-angular-dateinputs @progress/kendo-data-query @progress/kendo-angular-intl @progress/kendo-angular-l10n @progress/kendo-drawing @progress/kendo-angular-excel-export @angular/animations
 https://www.telerik.com/kendo-angular-ui/components/grid/api/CommandColumnComponent/
+
+arCul = new CultureInfo("ar-SA");
+            enCul = new CultureInfo("en-US");
+
+            h = new HijriCalendar();
+            g = new GregorianCalendar(GregorianCalendarTypes.USEnglish);
+
+            arCul.DateTimeFormat.Calendar = h;
+           // string dat = "25-10-1441 00:00:00";
+            string dat = "10-10-1441 00:00:00";
+            DateTime dt = Convert.ToDateTime(dat, arCul.DateTimeFormat);
+            string cdat= dt.ToString("yyyy/MM/dd", enCul.DateTimeFormat);
